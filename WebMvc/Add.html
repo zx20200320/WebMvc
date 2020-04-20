@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="Scripts/jquery-3.3.1.min.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <a href="Show.html">返回列表</a>
+    <div class="container">
+        <table>
+            <tr>
+                <td>姓名:</td>
+                <td><input id="txtName" type="text" /></td>
+            </tr>
+            <tr>
+                <td>年龄:</td>
+                <td><input id="txtAge" type="text" /></td>
+            </tr>
+            <tr>
+                <td>电话:</td>
+                <td><input id="txtTel" type="text" /></td>
+            </tr>
+            <tr>
+                <td>邮箱:</td>
+                <td><input id="txtEmail" type="text" /></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input id="Button1" type="button" value="添加" onclick="Add()" /></td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
+<script>
+    function Add() {
+        var obj={};
+        obj.Name = $("#txtName").val();
+        obj.Age = $("#txtAge").val();
+        obj.Tel = $("#txtTel").val();
+        obj.Email = $("#txtEmail").val();
+        $.ajax({
+            url: 'http://localhost:65396/api/Student/AddStu',
+            data: obj,
+            type: 'post',
+            dataType: 'json',
+            success: function (d) {
+                if (d>0) {
+                    alert('添加成功！');
+                }
+            }
+
+        })
+    }
+</script>

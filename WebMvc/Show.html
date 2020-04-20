@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="Scripts/jquery-3.3.1.min.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <!--查询-->
+        <table>
+            <tr>
+                <td>
+                    姓名:<input id="txtName" type="text" />
+                    电话:<input id="txtTel" type="text" />
+                    <input id="Button1" type="button" value="查询" onclick="Show(1)" />
+                </td>
+            </tr>
+        </table>
+        <!--显示-->
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>编号</th>
+                    <th>姓名</th>
+                    <th>年龄</th>
+                    <th>电话</th>
+                    <th>邮箱</th>
+                </tr>
+            <thead>
+            <tbody id="tb"></tbody>
+        </table>
+        <!--分页-->
+        <table>
+            <tr>
+                <td><a href="#" onclick="First()">首页</a></td>
+                <td><a href="#" onclick="Prev()">上一页</a></td>
+                <td><a href="#" onclick="Next()">下一页</a></td>
+                <td><a href="#" onclick="Last()">尾页</a></td>
+                <td>共<span id="totleRecod"></span>条记录</td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
+<script>
+    var nowIndex = 1;       //当前页数
+    var pageCount = 1;      //总页数
+    Show();
+    function Show(index) {
+        var obj = { PageIndex: index, PageSize: 3 };
+        obj.Name = $("#txtName").val();
+        obj.Tel = $("#txtTel").val();
+        $.ajax({
+            url: 'http://localhost:65396/api/Student/GetDate',
+            type: 'get',
+            data: obj,
+            dataType: 'json',
+            success: function (d) {
+                $("#tb").empty();
+                $(d.Data).each(function () {
+                    var line = '<tr>'
+                        + '<td>' + this.Id + '</td>'
+                        + '<td>' + this.Name + '</td>'
+                        + '<td>' + this.Age + '</td>'
+                        + '<td>' + this.Tel + '</td>'
+                        + '<td>' + this.Email + '</td>'
+                        + '</tr>';
+                    $("#tb").append(line);
+                });
+                TotalPage = d.TotalPage;
+                $("#totleRecod").html(d.TotalRecord)
+            }
+        })
+    }
+    function First() {
+        nowIndex = 1;
+        Show(nowIndex);
+    }
+    function Prev() {
+        nowIndex--;
+        if (nowIndex<1) {
+            nowIndex = 1;
+        }
+        Show(nowIndex);
+    }
+    function Next() {
+        nowIndex ++;
+        if (nowIndex > TotlePage) {
+            nowIndex = TotlePage;
+        }
+        Show(nowIndex);
+    }
+    function Last() {
+        nowIndex = TotlePage;
+        Show(nowIndex);
+    }
+</script>
